@@ -10,4 +10,6 @@ public interface IGameLogic {
 
     void update(float interval);
 
+    void cleanup();
+
 }

@@ -75,7 +75,7 @@ public class Window {
         glfwShowWindow(windowHandle);
         GL.createCapabilities();
 
-        glClearColor(0.3f, 0.4f, 0.2f, 0.1f);
+        setClearColor(0.0f, 0.0f, 0.0f, 0.1f);
 
     }
 

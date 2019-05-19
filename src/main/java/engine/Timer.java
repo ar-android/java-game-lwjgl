@@ -16,7 +16,7 @@ public class Timer {
     }
 
     public double getLastLoopTime() {
-        return 0.0;
+        return lastLoopTime;
     }
 
     public double getTime() {
