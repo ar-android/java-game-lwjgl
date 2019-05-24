@@ -25,12 +25,16 @@ public class DummyGame implements IGameLogic {
         float[] position = new float[]{
                 -0.5f, 0.5f,0.0f,
                 -0.5f,-0.5f,0.0f,
-                 0.5f, 0.5f,0.0f,
-                 0.5f, 0.5f,0.0f,
-                -0.5f,-0.5f,0.0f,
                  0.5f,-0.5f,0.0f,
+                 0.5f, 0.5f,0.0f,
         };
-        mesh = new Mesh(position);
+
+        int[] indices = new int[]{
+                0, 1, 3,
+                3, 1, 2
+        };
+
+        mesh = new Mesh(position, indices);
     }
 
     @Override
@@ -63,5 +67,6 @@ public class DummyGame implements IGameLogic {
     @Override
     public void cleanup() {
         renderer.cleanup();
+        mesh.cleanUp();
     }
 }

@@ -5,9 +5,6 @@ import engine.Window;
 import engine.graphic.Mesh;
 import engine.graphic.ShaderProgram;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.system.MemoryUtil;
-
-import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.opengl.GL30.*;
@@ -44,7 +41,8 @@ public class Renderer {
 
         glBindVertexArray(mesh.getVaoId());
         glEnableVertexAttribArray(0);
-        glDrawArrays(GL_TRIANGLES, 0, mesh.getVertextCount());
+
+        glDrawElements(GL_TRIANGLES, mesh.getVertexCount(), GL_UNSIGNED_INT, 0);
 
         glDisableVertexAttribArray(0);
         glBindVertexArray(0);

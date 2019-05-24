@@ -4,21 +4,33 @@ import static org.lwjgl.opengl.GL30.*;
 import org.lwjgl.system.MemoryUtil;
 
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
 public class Mesh {
+    private final int vertexCount;
     private final int vaoId;
     private final int vboId;
-    private final int vertextCount;
+    private final int idxVboId;
 
-    public Mesh(float[] positions) {
+    public Mesh(float[] positions, int[] indices) {
         FloatBuffer verticesBuffer = null;
+        IntBuffer indicesBuffer = null;
+
         try{
-            verticesBuffer = MemoryUtil.memAllocFloat(positions.length);
-            vertextCount = positions.length / 3;
-            verticesBuffer.put(positions).flip();
+            vertexCount = indices.length;
 
             vaoId = glGenVertexArrays();
             glBindVertexArray(vaoId);
+
+            verticesBuffer = MemoryUtil.memAllocFloat(positions.length);
+            verticesBuffer.put(positions).flip();
+
+            indicesBuffer = MemoryUtil.memAllocInt(indices.length);
+            indicesBuffer.put(indices).flip();
+
+            idxVboId = glGenBuffers();
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, idxVboId);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL_STATIC_DRAW);
 
             vboId = glGenBuffers();
             glBindBuffer(GL_ARRAY_BUFFER, vboId);
@@ -31,6 +43,10 @@ public class Mesh {
             if (verticesBuffer != null){
                 MemoryUtil.memFree(verticesBuffer);
             }
+
+            if (verticesBuffer != null){
+                MemoryUtil.memFree(indicesBuffer);
+            }
         }
     }
 
@@ -42,8 +58,8 @@ public class Mesh {
         return vboId;
     }
 
-    public int getVertextCount() {
-        return vertextCount;
+    public int getVertexCount() {
+        return vertexCount;
     }
 
     public void cleanUp() {
@@ -51,6 +67,7 @@ public class Mesh {
 
         glBindBuffer(GL_ARRAY_BUFFER,0);
         glDeleteBuffers(vboId);
+        glDeleteBuffers(idxVboId);
 
         glBindVertexArray(0);
         glDeleteBuffers(vaoId);
