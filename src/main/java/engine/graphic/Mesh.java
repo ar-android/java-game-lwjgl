@@ -80,6 +80,7 @@ public class Mesh {
 
         glBindBuffer(GL_ARRAY_BUFFER,0);
         glDeleteBuffers(vboId);
+        glDeleteBuffers(vcoId);
         glDeleteBuffers(idxVboId);
 
         glBindVertexArray(0);
