@@ -41,6 +41,7 @@ public class Renderer {
 
         glBindVertexArray(mesh.getVaoId());
         glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
 
         glDrawElements(GL_TRIANGLES, mesh.getVertexCount(), GL_UNSIGNED_INT, 0);
 

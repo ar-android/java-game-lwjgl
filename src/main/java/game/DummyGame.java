@@ -29,12 +29,19 @@ public class DummyGame implements IGameLogic {
                  0.5f, 0.5f,0.0f,
         };
 
+        float[] colors = new float[]{
+                0.5f, 0.0f, 0.0f, // top left
+                0.5f, 0.3f, 0.0f, // bottom left
+                0.0f, 0.3f, 0.5f, // bottom right
+                0.1f, 0.5f, 0.5f, // top right
+        };
+
         int[] indices = new int[]{
                 0, 1, 3,
                 3, 1, 2
         };
 
-        mesh = new Mesh(position, indices);
+        mesh = new Mesh(position, colors, indices);
     }
 
     @Override

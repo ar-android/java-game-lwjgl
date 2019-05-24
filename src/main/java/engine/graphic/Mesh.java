@@ -11,9 +11,11 @@ public class Mesh {
     private final int vaoId;
     private final int vboId;
     private final int idxVboId;
+    private final int vcoId;
 
-    public Mesh(float[] positions, int[] indices) {
+    public Mesh(float[] positions, float[] colors, int[] indices) {
         FloatBuffer verticesBuffer = null;
+        FloatBuffer colorsBuffers = null;
         IntBuffer indicesBuffer = null;
 
         try{
@@ -24,18 +26,24 @@ public class Mesh {
 
             verticesBuffer = MemoryUtil.memAllocFloat(positions.length);
             verticesBuffer.put(positions).flip();
-
-            indicesBuffer = MemoryUtil.memAllocInt(indices.length);
-            indicesBuffer.put(indices).flip();
-
-            idxVboId = glGenBuffers();
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, idxVboId);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL_STATIC_DRAW);
-
             vboId = glGenBuffers();
             glBindBuffer(GL_ARRAY_BUFFER, vboId);
             glBufferData(GL_ARRAY_BUFFER, verticesBuffer, GL_STATIC_DRAW);
             glVertexAttribPointer(0,3,GL_FLOAT, false, 0,0);
+
+            colorsBuffers = MemoryUtil.memAllocFloat(colors.length);
+            colorsBuffers.put(colors).flip();
+            vcoId = glGenBuffers();
+            glBindBuffer(GL_ARRAY_BUFFER, vcoId);
+            glBufferData(GL_ARRAY_BUFFER, colorsBuffers, GL_STATIC_DRAW);
+            glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
+
+            indicesBuffer = MemoryUtil.memAllocInt(indices.length);
+            indicesBuffer.put(indices).flip();
+            idxVboId = glGenBuffers();
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, idxVboId);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL_STATIC_DRAW);
+
 
             glBindBuffer(GL_ARRAY_BUFFER, 0);
             glBindVertexArray(0);
@@ -47,7 +55,12 @@ public class Mesh {
             if (verticesBuffer != null){
                 MemoryUtil.memFree(indicesBuffer);
             }
+
+            if (colorsBuffers != null){
+                MemoryUtil.memFree(colorsBuffers);
+            }
         }
+
     }
 
     public int getVaoId() {
