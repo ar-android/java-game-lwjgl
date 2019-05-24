@@ -63,16 +63,15 @@ public class Mesh {
 
     }
 
-    public int getVaoId() {
-        return vaoId;
-    }
+    public void render() {
+        glBindVertexArray(vaoId);
+        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
 
-    public int getVboId() {
-        return vboId;
-    }
+        glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
 
-    public int getVertexCount() {
-        return vertexCount;
+        glDisableVertexAttribArray(0);
+        glBindVertexArray(0);
     }
 
     public void cleanUp() {
