@@ -6,7 +6,6 @@ import engine.graphic.Mesh;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
-import static org.lwjgl.opengl.GL11.glViewport;
 
 public class DummyGame implements IGameLogic {
 
@@ -20,13 +19,13 @@ public class DummyGame implements IGameLogic {
     }
 
     @Override
-    public void init() throws Exception {
-        renderer.init();
-        float[] position = new float[]{
-                -0.5f, 0.5f,0.0f,
-                -0.5f,-0.5f,0.0f,
-                 0.5f,-0.5f,0.0f,
-                 0.5f, 0.5f,0.0f,
+    public void init(Window window) throws Exception {
+        renderer.init(window);
+        float[] positions = new float[]{
+                -0.5f,  0.5f, -1.05f,
+                -0.5f, -0.5f, -1.05f,
+                0.5f, -0.5f,  -1.05f,
+                0.5f,  0.5f,  -1.05f,
         };
 
         float[] colors = new float[]{
@@ -41,7 +40,7 @@ public class DummyGame implements IGameLogic {
                 3, 1, 2
         };
 
-        mesh = new Mesh(position, colors, indices);
+        mesh = new Mesh(positions, colors, indices);
     }
 
     @Override

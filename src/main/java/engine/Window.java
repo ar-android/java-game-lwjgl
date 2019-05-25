@@ -77,6 +77,7 @@ public class Window {
 
         setClearColor(0.0f, 0.0f, 0.0f, 0.1f);
 
+
     }
 
     public void setClearColor(float r, float g, float b, float alpha) {

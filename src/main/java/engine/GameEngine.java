@@ -41,7 +41,7 @@ public class GameEngine implements Runnable{
     private void init() throws Exception{
         window.init();
         timer.init();
-        gameLogic.init();
+        gameLogic.init(window);
     }
 
     private void gameLoop(){

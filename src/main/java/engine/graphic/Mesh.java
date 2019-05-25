@@ -44,7 +44,6 @@ public class Mesh {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, idxVboId);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL_STATIC_DRAW);
 
-
             glBindBuffer(GL_ARRAY_BUFFER, 0);
             glBindVertexArray(0);
         }finally {
@@ -67,9 +66,7 @@ public class Mesh {
         glBindVertexArray(vaoId);
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
-
         glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
-
         glDisableVertexAttribArray(0);
         glBindVertexArray(0);
     }
