@@ -80,6 +80,7 @@ public class Window {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
     }
 
     public void setClearColor(float r, float g, float b, float alpha) {
@@ -112,6 +113,10 @@ public class Window {
 
     public int getHeight() {
         return height;
+    }
+
+    public long getWindowHandle() {
+        return windowHandle;
     }
 
     public boolean isResized() {

@@ -21,18 +21,20 @@ public class GameItem {
         return position;
     }
 
-    public void setPosition(float x, float y, float z) {
+    public GameItem setPosition(float x, float y, float z) {
         this.position.x = x;
         this.position.y = y;
         this.position.z = z;
+        return this;
     }
 
     public float getScale() {
         return scale;
     }
 
-    public void setScale(float scale) {
+    public GameItem setScale(float scale) {
         this.scale = scale;
+        return this;
     }
 
     public Vector3f getRotation() {

@@ -9,12 +9,14 @@ public class GameEngine implements Runnable{
     private final Thread gameLoopThread;
     private final Timer timer;
     private final IGameLogic gameLogic;
+    private final MouseInput mouseInput;
 
     public GameEngine(String windowTitle, int width, int height, boolean vSync, IGameLogic gameLogic) {
         this.window = new Window(windowTitle, width, height, vSync);
         this.gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
         this.timer = new Timer();
         this.gameLogic = gameLogic;
+        this.mouseInput = new MouseInput();
     }
 
     public void start(){
@@ -40,6 +42,7 @@ public class GameEngine implements Runnable{
 
     private void init() throws Exception{
         window.init();
+        mouseInput.init(window);
         timer.init();
         gameLogic.init(window);
     }
@@ -88,11 +91,12 @@ public class GameEngine implements Runnable{
     }
 
     private void update(float interval) {
-        gameLogic.update(interval);
+        gameLogic.update(interval, mouseInput);
     }
 
     private void input() {
-        gameLogic.input(window);
+        mouseInput.input(window);
+        gameLogic.input(window, mouseInput);
     }
 
     public void cleanup() {
