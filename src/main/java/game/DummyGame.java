@@ -29,7 +29,7 @@ public class DummyGame implements IGameLogic {
         };
 
         float[] colors = new float[]{
-                0.5f, 0.0f, 0.0f, // top left
+                0.0f, 0.5f, 0.3f, // top left
                 0.5f, 0.3f, 0.0f, // bottom left
                 0.0f, 0.3f, 0.5f, // bottom right
                 0.1f, 0.5f, 0.5f, // top right
