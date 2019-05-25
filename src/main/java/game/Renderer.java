@@ -3,20 +3,18 @@ package game;
 import engine.GameItem;
 import engine.Utils;
 import engine.Window;
-import engine.graphic.Mesh;
 import engine.graphic.ShaderProgram;
 import engine.graphic.Transformation;
 import org.joml.Matrix4f;
-import org.lwjgl.opengl.GL11;
 
-import static org.lwjgl.opengl.GL11.glViewport;
+import static org.lwjgl.opengl.GL11.*;
 
 public class Renderer {
 
     private ShaderProgram shaderProgram;
 
     private static final float FOV = (float) Math.toRadians(60.0f);
-    private final float Z_NEAR = 0.0f;
+    private final float Z_NEAR = 0.01f;
     private final float Z_FAR = 1000;
 
     private Transformation transformation;
@@ -32,10 +30,11 @@ public class Renderer {
         shaderProgram.link();
         shaderProgram.createUniform("projectionMatrix");
         shaderProgram.createUniform("worldMatrix");
+        shaderProgram.createUniform("texture_sampler");
     }
 
     public void clear() {
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
     public void render(Window window, GameItem[] gameItems) {
@@ -48,6 +47,7 @@ public class Renderer {
 
         shaderProgram.bind();
 
+        shaderProgram.setUniformi("texture_sampler", 0);
 
         Matrix4f projectionMatrix = transformation.getProjectionMatrix(FOV, window.getWidth(), window.getHeight(), Z_NEAR, Z_FAR);
         shaderProgram.setUniform("projectionMatrix", projectionMatrix);
