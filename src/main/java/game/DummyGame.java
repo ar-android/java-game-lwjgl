@@ -4,9 +4,9 @@ import engine.GameItem;
 import engine.IGameLogic;
 import engine.Window;
 import engine.graphic.Mesh;
+import org.joml.Vector3f;
 
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class DummyGame implements IGameLogic {
 
@@ -15,6 +15,11 @@ public class DummyGame implements IGameLogic {
     private final Renderer renderer;
     private GameItem[] gameItems;
 
+    private int displyInc;
+    private int displxInc;
+    private int displzInc;
+    private int scaleInc;
+
     public DummyGame() {
         renderer = new Renderer();
     }
@@ -22,23 +27,50 @@ public class DummyGame implements IGameLogic {
     @Override
     public void init(Window window) throws Exception {
         renderer.init(window);
+
         float[] positions = new float[]{
-                -0.5f,  0.5f, -1.05f,
-                -0.5f, -0.5f, -1.05f,
-                0.5f, -0.5f,  -1.05f,
-                0.5f,  0.5f,  -1.05f,
+                // VO
+                -0.5f, 0.5f, 0.5f,
+                // V1
+                -0.5f, 0-.5f, 0.5f,
+                // V2
+                0.5f, -0.5f, 0.5f,
+                // V3
+                0.5f, 0.5f, 0.5f,
+                // V4
+                -0.5f, 0.5f, -0.5f,
+                // V5
+                0.5f, 0.5f, -0.5f,
+                // V6
+                -0.5f, -0.5f, -0.5f,
+                // V7
+                0.5f, -0.5f, -0.5f,
         };
 
         float[] colors = new float[]{
-                0.0f, 0.5f, 0.3f, // top left
-                0.5f, 0.3f, 0.0f, // bottom left
-                0.0f, 0.3f, 0.5f, // bottom right
-                0.1f, 0.5f, 0.5f, // top right
+                0.5f, 0.0f, 0.0f,
+                0.0f, 0.5f, 0.0f,
+                0.0f, 0.0f, 0.5f,
+                0.0f, 0.5f, 0.5f,
+                0.5f, 0.0f, 0.5f,
+                0.0f, 0.5f, 0.5f,
+                0.0f, 0.0f, 0.5f,
+                0.0f, 0.5f, 0.5f,
         };
 
-        int[] indices = new int[]{
-                0, 1, 3,
-                3, 1, 2
+        int[] indices = new  int[]{
+                // Front face
+                0, 1, 3, 3, 1, 2,
+                // Top face
+                4, 0, 3, 5, 4, 3,
+                // Right face
+                3, 2, 7, 5, 3, 7,
+                // Left face
+                6, 1, 0, 6, 0, 4,
+                // Bottom face
+                2, 1, 6, 2, 6, 7,
+                // Back face
+                7, 6, 4, 7, 4, 5
         };
 
         Mesh mesh = new Mesh(positions, colors, indices);
@@ -50,28 +82,56 @@ public class DummyGame implements IGameLogic {
 
     @Override
     public void input(Window window) {
+        displyInc = 0;
+        displxInc = 0;
+        displzInc = 0;
+        scaleInc = 0;
+
         if (window.isKeyPressed(GLFW_KEY_UP)){
-            direction = 1;
-        }else if(window.isKeyPressed(GLFW_KEY_DOWN)){
-            direction = -1;
-        }else {
-            direction = 0;
+            displyInc = 1;
+        }else if (window.isKeyPressed(GLFW_KEY_DOWN)){
+            displyInc = -1;
+        }else if (window.isKeyPressed(GLFW_KEY_LEFT)){
+            displxInc = 1;
+        }else if (window.isKeyPressed(GLFW_KEY_RIGHT)){
+            displxInc = -1;
+        }else if (window.isKeyPressed(GLFW_KEY_A)){
+            displzInc = -1;
+        }else if (window.isKeyPressed(GLFW_KEY_Q)){
+            displzInc = 1;
+        }else if (window.isKeyPressed(GLFW_KEY_Z)){
+            scaleInc = -1;
+        }else if (window.isKeyPressed(GLFW_KEY_Y)){
+            scaleInc = 1;
         }
     }
 
     @Override
     public void render(Window window) {
-        window.setClearColor(color, color, color, 0.0f);
         renderer.render(window, gameItems);
     }
 
     @Override
     public void update(float interval) {
-        color += direction * 0.01f;
-        if (color > 1) {
-            color = 1.0f;
-        }else if(color < 0) {
-            color = 0.0f;
+        for (GameItem gameItem : gameItems) {
+            Vector3f position = gameItem.getPosition();
+            float posx = position.x + displxInc * 0.01f;
+            float posy = position.y + displyInc * 0.01f;
+            float posz = position.z + displzInc * 0.01f;
+            gameItem.setPosition(posx, posy, posz);
+
+            float scale = gameItem.getScale();
+            scale += scaleInc * 0.05f;
+            if (scale < 0){
+                scale = 0;
+            }
+            gameItem.setScale(scale);
+
+            float rotation = gameItem.getRotation().x + 1.5f;
+            if (rotation > 360){
+                rotation = 0;
+            }
+            gameItem.setRotation(rotation, rotation, rotation);
         }
     }
 
