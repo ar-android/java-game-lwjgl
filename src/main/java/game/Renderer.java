@@ -1,5 +1,6 @@
 package game;
 
+import engine.GameItem;
 import engine.Utils;
 import engine.Window;
 import engine.graphic.Mesh;
@@ -30,14 +31,14 @@ public class Renderer {
         shaderProgram.createFragmentShader(Utils.loadResource("/fragment.fs"));
         shaderProgram.link();
         shaderProgram.createUniform("projectionMatrix");
-        transformation.setProjectionMatrix(window, FOV, Z_NEAR, Z_FAR);
+        shaderProgram.createUniform("worldMatrix");
     }
 
     public void clear() {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
     }
 
-    public void render(Window window, Mesh mesh) {
+    public void render(Window window, GameItem[] gameItems) {
         clear();
 
         if (window.isResized()) {
@@ -47,8 +48,19 @@ public class Renderer {
 
         shaderProgram.bind();
 
-        shaderProgram.setUniform("projectionMatrix", transformation.getProjectionMatrix());
-        mesh.render();
+
+        Matrix4f projectionMatrix = transformation.getProjectionMatrix(FOV, window.getWidth(), window.getHeight(), Z_NEAR, Z_FAR);
+        shaderProgram.setUniform("projectionMatrix", projectionMatrix);
+
+        for (GameItem gameItem : gameItems) {
+            Matrix4f worldMatrix = transformation.getWorldMatrix(
+                    gameItem.getPosition(),
+                    gameItem.getRotation(),
+                    gameItem.getScale()
+            );
+            shaderProgram.setUniform("worldMatrix", worldMatrix);
+            gameItem.getMesh().render();
+        }
 
         shaderProgram.unbind();
 

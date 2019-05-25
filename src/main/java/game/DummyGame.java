@@ -1,5 +1,6 @@
 package game;
 
+import engine.GameItem;
 import engine.IGameLogic;
 import engine.Window;
 import engine.graphic.Mesh;
@@ -12,7 +13,7 @@ public class DummyGame implements IGameLogic {
     private int direction = 0;
     private float color = 0.0f;
     private final Renderer renderer;
-    private Mesh mesh;
+    private GameItem[] gameItems;
 
     public DummyGame() {
         renderer = new Renderer();
@@ -40,7 +41,11 @@ public class DummyGame implements IGameLogic {
                 3, 1, 2
         };
 
-        mesh = new Mesh(positions, colors, indices);
+        Mesh mesh = new Mesh(positions, colors, indices);
+
+        GameItem gameItem = new GameItem(mesh);
+        gameItem.setPosition(0,0,-2);
+        gameItems = new GameItem[]{gameItem};
     }
 
     @Override
@@ -57,7 +62,7 @@ public class DummyGame implements IGameLogic {
     @Override
     public void render(Window window) {
         window.setClearColor(color, color, color, 0.0f);
-        renderer.render(window, mesh);
+        renderer.render(window, gameItems);
     }
 
     @Override
@@ -73,6 +78,8 @@ public class DummyGame implements IGameLogic {
     @Override
     public void cleanup() {
         renderer.cleanup();
-        mesh.cleanUp();
+        for (GameItem gameItem : gameItems) {
+            gameItem.getMesh().cleanUp();
+        }
     }
 }
